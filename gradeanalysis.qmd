@@ -7,8 +7,7 @@ format:
     echo: false
 ---
 
-```{r}
-#|message: false
+```{r message=FALSE}
 here::i_am("r-101-grade-analysis.Rproj")
 library(here)
 library(ggplot2)
@@ -17,8 +16,7 @@ library(dplyr)
 library(vroom)
 ```
 ## Question 1
-```{r}
-#|message: false
+```{r message=FALSE}
 grades<-vroom(here("grades.csv"))
 ```
 
@@ -49,39 +47,44 @@ ggplot(grades, aes(x=Exam))+
 nb_grp_split<- grades|>
   group_by(Group)|>
   summarise(N=n())
+nb_grp_split|>knitr::kable()
 ```
 
 ## Question 6
 ```{r}
 ggplot(nb_grp_split,aes(x=Group,y=N))+
-  geom_col(fill="darkred")+
+  geom_col(fill="darkred", alpha=0.7)+
   labs(title="Number of students per group",x="Group",y="Number of students")
 ```
 
 
 ## Question 7 
-a)
 ```{r}
 ggplot(grades,aes(y=Exam, fill=Group))+
   geom_boxplot()+
-  labs(title="Distribution of exams grades by group", x="Group",y="Exam grades")
+  labs(title="Distribution of exams grades by group", x="Group",y="Exam grades")+coord_flip()
+
 ggplot(grades, aes(x=Exam, fill=Group))+
-  geom_density()+
+  geom_density(alpha=0.7)+
   labs(title="Distribution of exams grades by group", x="Exam grades",y="Density")+facet_wrap(~Group, ncol=4)
 ```
-b)
-```{r}
-ggplot(grades, aes(x=Exam, fill=Group))+
-  geom_density()+
-  labs(title="Distribution of exams grades by group", x="Exam grades",y="Density")+facet_wrap(~Group, ncol=4)
-```
+
+
 ## Question 8
 ```{r}
-grades|>group_by(Group)|>summarise(Nb_Missed_Exam=sum(is.na(Exam)))|>knitr::kable()
+missed_exam<- grades|>group_by(Group)|>summarise(Nb_Missed_Exam=sum(is.na(Exam)))
 ```
 ## Question 9
 ```{r}
-
+ggplot(missed_exam,aes(x=Group,y=Nb_Missed_Exam))+
+  geom_col(fill="blue")+
+  labs(title="Missing students to the final exam by group", x="Groups",y="Number of missing students")+
+  coord_flip()
 ```
 
+## Question 10
+```{r}
+long_grades<-grades|>select(Id,Group,starts_with("MCQ"),starts_with("Online"))
+long_grades
+```
 
