@@ -23,7 +23,7 @@ grades<-vroom(here("grades.csv"))
 
 ```{r}
 grades|>
-  summarise(min(`Exam`,na.rm=TRUE),max(`Exam`,na.rm=TRUE),median(`Exam`,na.rm=TRUE),mean(`Exam`,na.rm=TRUE))|>
+  summarise(MinGrade=min(`Exam`,na.rm=TRUE),MaxGrade=max(`Exam`,na.rm=TRUE),MedianGrade=median(`Exam`,na.rm=TRUE),AvgGrade=mean(`Exam`,na.rm=TRUE))|>
   knitr::kable()
 ```
 
@@ -42,4 +42,24 @@ ggplot(grades, aes(x=Exam))+
        x="Exam grades",
        y= "Frequency")
 ```
+## Question 5
+```{r}
+grades|>
+  group_by(Group)|>
+  summarise(N=n())
+```
+## Question 7 
+a)
+```{r}
+ggplot(grades,aes(x=Group, y=Exam, fill=Group))+
+  geom_boxplot()+
+  labs(title="Distribution of exams grades by group", x="Group",y="Exam grades")
+```
+b)
+```{r}
+ggplot(grades, aes(x=Exam, fill=Group))+
+  geom_density()+
+  labs(title="Distribution of exams grades by group", x="Exam grades",y="Density")+facet_wrap(~Group, ncol=4)
+```
+
 
