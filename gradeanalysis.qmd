@@ -1,13 +1,14 @@
 ---
 title: "GradeAnalysis"
 author: "Max"
+message: false
 format: 
   html:
-    message: false
     echo: false
 ---
 
 ```{r}
+#|message: false
 here::i_am("r-101-grade-analysis.Rproj")
 library(here)
 library(ggplot2)
@@ -15,12 +16,13 @@ library(tidyr)
 library(dplyr)
 library(vroom)
 ```
-
+## Question 1
 ```{r}
+#|message: false
 grades<-vroom(here("grades.csv"))
 ```
-## Question 2
 
+## Question 2
 ```{r}
 grades|>
   summarise(MinGrade=min(`Exam`,na.rm=TRUE),MaxGrade=max(`Exam`,na.rm=TRUE),MedianGrade=median(`Exam`,na.rm=TRUE),AvgGrade=mean(`Exam`,na.rm=TRUE))|>
@@ -32,7 +34,7 @@ grades|>
 ```{r}
 nb_stud_exam<-sum(is.na(grades$Exam))
 ```
-There is a total of `r nb_stud_exam` students who passed the test
+There is a total of `r nb_stud_exam` students who did not passed the test
 
 ## Question 4
 ```{r}
@@ -44,22 +46,42 @@ ggplot(grades, aes(x=Exam))+
 ```
 ## Question 5
 ```{r}
-grades|>
+nb_grp_split<- grades|>
   group_by(Group)|>
   summarise(N=n())
 ```
+
+## Question 6
+```{r}
+ggplot(nb_grp_split,aes(x=Group,y=N))+
+  geom_col(fill="darkred")+
+  labs(title="Number of students per group",x="Group",y="Number of students")
+```
+
+
 ## Question 7 
 a)
 ```{r}
-ggplot(grades,aes(x=Group, y=Exam, fill=Group))+
+ggplot(grades,aes(y=Exam, fill=Group))+
   geom_boxplot()+
   labs(title="Distribution of exams grades by group", x="Group",y="Exam grades")
+ggplot(grades, aes(x=Exam, fill=Group))+
+  geom_density()+
+  labs(title="Distribution of exams grades by group", x="Exam grades",y="Density")+facet_wrap(~Group, ncol=4)
 ```
 b)
 ```{r}
 ggplot(grades, aes(x=Exam, fill=Group))+
   geom_density()+
   labs(title="Distribution of exams grades by group", x="Exam grades",y="Density")+facet_wrap(~Group, ncol=4)
+```
+## Question 8
+```{r}
+grades|>group_by(Group)|>summarise(Nb_Missed_Exam=sum(is.na(Exam)))|>knitr::kable()
+```
+## Question 9
+```{r}
+
 ```
 
 
