@@ -84,7 +84,8 @@ ggplot(missed_exam,aes(x=Group,y=Nb_Missed_Exam))+
 
 ## Question 10
 ```{r}
-long_grades<-grades|>select(Id,Group,starts_with("MCQ"),starts_with("Online"))
-long_grades
+longgrade<-pivot_longer(grades,cols=c(Exam,starts_with("MCQ"),starts_with("Online")),names_to="name",values_to="value")
+longgrade
 ```
+
 
