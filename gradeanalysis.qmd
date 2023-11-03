@@ -113,6 +113,14 @@ knitr::kable(missing_stud_per_grp)
 ```{r}
 online_mcq_data<-longgrade|>filter(str_starts(name,"Online"))
 missing_onlgrade_per_stud<-online_mcq_data|>group_by(Id)|>summarise(num_missing=sum(is.na(value)))
-missing_onlgrade_per_stud
+knitr::kable(missing_onlgrade_per_stud)
 ```
+## Question 15
 
+```{r}
+result<-grades|>rowwise()|>mutate(missingonlinegrades=sum(is.na(c_across(starts_with("Online")))))
+
+ggplot(result,aes(x=Exam))+
+  geom_histogram(binwidth=1,fill="blue",color="black")+
+  facet_wrap(~missingonlinegrades)
+```
