@@ -73,6 +73,7 @@ ggplot(grades, aes(x=Exam, fill=Group))+
 ## Question 8
 ```{r}
 missed_exam<- grades|>group_by(Group)|>summarise(Nb_Missed_Exam=sum(is.na(Exam)))
+knitr::kable(missed_exam)
 ```
 ## Question 9
 ```{r}
@@ -91,5 +92,19 @@ longgrade<-pivot_longer(grades,cols=c(Exam,starts_with("MCQ"),starts_with("Onlin
 missing_grades<-longgrade|>group_by(Id)|>summarise(total_missing=sum(is.na(value)))
 knitr::kable(missing_grades)
 ```
-
+## Question 12
+```{r}
+ggplot(data = missing_grades, aes(x = Id, y = total_missing)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(
+    title = "Distribution of Missing Grades per Student",
+    x = "Student ID",
+    y = "Number of Missing Grades"
+  ) 
+```
+## Question 13
+```{r}
+missing_stud_per_grp<-longgrade|>group_by(Group)|>filter(name=="Exam")|>summarise(num_missing=sum(is.na(value)))
+knitr::kable(missing_stud_per_grp)
+```
 
