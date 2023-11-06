@@ -124,3 +124,10 @@ ggplot(result,aes(x=Exam))+
   geom_histogram(binwidth=1,fill="blue",color="black")+
   facet_wrap(~missingonlinegrades)
 ```
+## Question 16
+```{r}
+missing_grades_bool<-data.frame(Id=missing_grades$Id,missed=ifelse(missing_grades$total_missing==0, FALSE, TRUE))
+missing_grades_bool
+```
+
+
